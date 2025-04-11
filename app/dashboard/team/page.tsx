@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
 import type { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal, ArrowUpDown, Mail, Phone, Plus, Download, Filter } from "lucide-react"
+import { ArrowUpDown, Download, Filter, Mail, MoreHorizontal, Phone, Plus } from "lucide-react"
+import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/ui/data-table"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { DataTable } from "@/components/ui/data-table"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,8 +17,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Define the Team Member type

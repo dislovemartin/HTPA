@@ -1,17 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { RAGChatInterface } from "@/components/ai/rag-chat-interface"
-import { DocumentUploader } from "@/components/ai/document-uploader"
-import { SentimentAnalyzer } from "@/components/ai/sentiment-analyzer"
 import { AnalyticsDashboard } from "@/components/ai/analytics-dashboard"
+import { DocumentUploader } from "@/components/ai/document-uploader"
+import { RAGChatInterface } from "@/components/ai/rag-chat-interface"
+import { SentimentAnalyzer } from "@/components/ai/sentiment-analyzer"
 import { AuthProvider, useAuth } from "@/components/auth-provider"
-import { ProtectedRoute } from "@/components/protected-route"
 import { ClientOnly } from "@/components/client-only"
-import { MessageSquare, FileUp, BarChart2, ThumbsUp } from "lucide-react"
-import Link from "next/link"
+import { ProtectedRoute } from "@/components/protected-route"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { BarChart2, FileUp, MessageSquare, ThumbsUp } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
 function AIAssistantContent() {
   const { user } = useAuth()
