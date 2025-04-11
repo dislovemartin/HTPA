@@ -1,7 +1,8 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { CheckCircle, FileText, Building2, Calculator, Shield, Users } from "lucide-react"
+import { Building2, Calculator, CheckCircle, FileText, Shield, Users } from "lucide-react"
 import Link from "next/link"
 
 const services = [
@@ -69,19 +70,19 @@ export default function ServicesSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-black border border-gold-900/30 rounded-lg p-6 hover:border-gold-500/50 transition-all duration-300 hover:shadow-gold"
+              className="bg-black border border-gold-900/30 rounded-lg p-6 hover:border-gold-500/50 card-hover transition-all duration-300 hover:shadow-gold"
             >
               <div className="mb-4 p-3 bg-gold-900/20 inline-block rounded-lg">{service.icon}</div>
               <h3 className="text-xl font-semibold text-white mb-3">{service.title}</h3>
               <p className="text-gray-400 mb-4">{service.description}</p>
               <Link
                 href="/services"
-                className="text-gold-500 hover:text-gold-400 flex items-center text-sm font-medium"
+                className="text-gold-500 hover:text-gold-400 flex items-center text-sm font-medium group"
               >
                 了解更多
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 ml-1"
+                  className="h-4 w-4 ml-1 transition-transform duration-200 group-hover:translate-x-1"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -93,13 +94,10 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Link
-            href="/services"
-            className="inline-block bg-transparent border border-gold-500 text-gold-500 hover:bg-gold-500/10 px-8 py-3 rounded-full font-medium transition-all"
-          >
-            查看所有服务
-          </Link>
+        <div className="text-center mt-16">
+          <Button asChild variant="outline" size="lg" className="border-gold-500 text-gold-500 hover:bg-gold-500/10 hover:text-gold-400 rounded-full px-8 py-3 font-medium transition-all">
+            <Link href="/services">查看所有服务</Link>
+          </Button>
         </div>
       </div>
     </section>

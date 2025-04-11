@@ -59,14 +59,14 @@ export default function WhyChooseUsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="text-center"
+              className="text-center h-full"
             >
-              <div className="bg-neutral-900 border border-gold-900/30 rounded-lg p-8 hover:border-gold-500/50 transition-all duration-300 h-full">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold-900/20 mb-6">
+              <div className="bg-neutral-900 border border-gold-900/30 rounded-lg p-8 hover:border-gold-500/50 card-hover transition-all duration-300 h-full flex flex-col items-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold-900/20 mb-6 flex-shrink-0">
                   {reason.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-4">{reason.title}</h3>
-                <p className="text-gray-400">{reason.description}</p>
+                <p className="text-gray-400 flex-grow">{reason.description}</p>
               </div>
             </motion.div>
           ))}

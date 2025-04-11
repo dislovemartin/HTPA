@@ -3,8 +3,21 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export default function AboutSection() {
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5
+      }
+    })
+  };
+
   return (
     <section className="py-20 bg-neutral-900 relative overflow-hidden">
       {/* Decorative elements */}
@@ -33,30 +46,42 @@ export default function AboutSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
             className="space-y-6"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
+            <motion.h2
+              custom={0}
+              variants={textVariants}
+              className="text-3xl md:text-4xl font-bold text-white"
+            >
               关于<span className="text-gold-500">我们</span>
-            </h2>
-            <p className="text-gray-400 leading-relaxed">
+            </motion.h2>
+            <motion.p
+              custom={1}
+              variants={textVariants}
+              className="text-gray-400 leading-relaxed"
+            >
               依托恒泰集团近40年的行业积淀与深厚商业背景，HTPA
               恒泰会计师事务所汇聚了一支由注册会计师（CPA）与持牌贷款经纪人组成的多语种专业团队，拥有近20年为中大型企业及个人提供全方位财税服务的实践经验。
-            </p>
-            <p className="text-gray-400 leading-relaxed">
+            </motion.p>
+            <motion.p
+              custom={2}
+              variants={textVariants}
+              className="text-gray-400 leading-relaxed"
+            >
               在瞬息万变的经济环境中，我们不仅帮助客户解决复杂的财税问题，更提供战略性的管理支持，让您专注发展，稳健前行。
-            </p>
-            <div className="pt-4">
-              <Link
-                href="/about"
-                className="inline-block bg-gold-500 hover:bg-gold-600 text-black px-8 py-3 rounded-full font-medium transition-all"
-              >
-                了解更多
-              </Link>
-            </div>
+            </motion.p>
+            <motion.div
+              custom={3}
+              variants={textVariants}
+              className="pt-4"
+            >
+              <Button asChild variant="gold" size="lg" className="rounded-full px-8 py-3 font-medium transition-all">
+                <Link href="/about">了解更多</Link>
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </div>

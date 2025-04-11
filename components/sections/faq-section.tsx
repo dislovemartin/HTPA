@@ -1,9 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 const faqs = [
   {
@@ -29,11 +31,16 @@ const faqs = [
 ]
 
 export default function FaqSection() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [activeIndex, setActiveIndex] = useState<number | null>(0)
 
   const toggleFaq = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index)
   }
+
+  const contentVariants = {
+    collapsed: { height: 0, opacity: 0, marginTop: 0 },
+    open: { height: "auto", opacity: 1, marginTop: '1rem' }
+  };
 
   return (
     <section className="py-20 bg-black relative overflow-hidden">
@@ -62,47 +69,48 @@ export default function FaqSection() {
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              className="mb-4 border border-gold-900/30 rounded-lg overflow-hidden bg-black hover:border-gold-500/50 transition-colors duration-300"
             >
-              <div
-                className={`border border-gold-900/30 rounded-lg overflow-hidden transition-all duration-300 ${
-                  activeIndex === index ? "bg-neutral-900" : "bg-black"
-                }`}
+              <button
+                className="flex justify-between items-center w-full p-4 text-left hover:bg-neutral-900/50 focus:bg-neutral-900/70 transition-colors duration-200 rounded-t-lg"
+                onClick={() => toggleFaq(index)}
+                aria-expanded={activeIndex === index}
+                aria-controls={`faq-content-${index}`}
               >
-                <button
-                  className="flex justify-between items-center w-full p-4 text-left"
-                  onClick={() => toggleFaq(index)}
-                >
-                  <span className="font-medium text-white">{faq.question}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 text-gold-500 transition-transform duration-300 ${
-                      activeIndex === index ? "transform rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    activeIndex === index ? "max-h-96 p-4 pt-0" : "max-h-0"
-                  }`}
-                >
-                  <p className="text-gray-400">{faq.answer}</p>
-                </div>
-              </div>
+                <span className="font-medium text-white mr-4">{faq.question}</span>
+                <ChevronDown
+                  className={cn(
+                    "h-5 w-5 text-gold-500 transition-transform duration-300 flex-shrink-0",
+                    activeIndex === index ? "transform rotate-180" : ""
+                  )}
+                />
+              </button>
+              <AnimatePresence initial={false}>
+                {activeIndex === index && (
+                  <motion.div
+                    id={`faq-content-${index}`}
+                    initial="collapsed"
+                    animate="open"
+                    exit="collapsed"
+                    variants={contentVariants}
+                    transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+                    className="overflow-hidden px-4 pb-4"
+                  >
+                    <p className="text-gray-400">{faq.answer}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Link
-            href="/faq"
-            className="inline-block bg-transparent border border-gold-500 text-gold-500 hover:bg-gold-500/10 px-8 py-3 rounded-full font-medium transition-all"
-          >
-            查看更多问题
-          </Link>
+          <Button asChild variant="outline" size="lg" className="border-gold-500 text-gold-500 hover:bg-gold-500/10 hover:text-gold-400 rounded-full px-8 py-3 font-medium transition-all">
+            <Link href="/faq">查看更多问题</Link>
+          </Button>
         </div>
       </div>
     </section>

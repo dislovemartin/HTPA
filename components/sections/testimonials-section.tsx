@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 const testimonials = [
   {
@@ -61,23 +63,23 @@ export default function TestimonialsSection() {
 
         <div className="max-w-4xl mx-auto">
           <div className="relative">
-            <div className="absolute -top-10 -left-10 text-gold-500/20">
+            <div className="absolute -top-10 -left-10 text-gold-500/20 z-0">
               <Quote size={80} />
             </div>
 
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-black border border-gold-900/30 rounded-lg p-8 md:p-12 relative z-10"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="bg-black border border-gold-900/30 rounded-lg p-8 md:p-12 relative z-10 min-h-[250px] flex flex-col justify-center"
             >
               <p className="text-xl md:text-2xl text-white italic mb-8 leading-relaxed">
                 {testimonials[currentIndex].content}
               </p>
-              <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-gold-900/30 flex items-center justify-center text-gold-500 mr-4">
+              <div className="flex items-center mt-auto">
+                <div className="w-12 h-12 rounded-full bg-gold-900/30 flex items-center justify-center text-gold-500 font-semibold mr-4 flex-shrink-0">
                   {testimonials[currentIndex].author.charAt(0)}
                 </div>
                 <div>
@@ -87,21 +89,39 @@ export default function TestimonialsSection() {
               </div>
             </motion.div>
 
-            <div className="flex justify-center mt-8 space-x-4">
-              <button
+            <div className="absolute top-1/2 -translate-y-1/2 flex justify-between w-full px-[-20px] md:px-[-40px] z-20">
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={prevTestimonial}
-                className="p-2 rounded-full bg-neutral-800 text-white hover:bg-gold-900/30 hover:text-gold-500 transition-colors"
+                className="bg-black/50 hover:bg-gold-900/30 border-gold-900/30 hover:border-gold-500/50 text-gold-500 rounded-full backdrop-blur-sm"
                 aria-label="Previous testimonial"
               >
                 <ChevronLeft size={24} />
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={nextTestimonial}
-                className="p-2 rounded-full bg-neutral-800 text-white hover:bg-gold-900/30 hover:text-gold-500 transition-colors"
+                className="bg-black/50 hover:bg-gold-900/30 border-gold-900/30 hover:border-gold-500/50 text-gold-500 rounded-full backdrop-blur-sm"
                 aria-label="Next testimonial"
               >
                 <ChevronRight size={24} />
-              </button>
+              </Button>
+            </div>
+
+            <div className="flex justify-center mt-8 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-colors duration-300",
+                    currentIndex === index ? "bg-gold-500 scale-125" : "bg-neutral-700 hover:bg-neutral-600"
+                  )}
+                  aria-label={`Go to testimonial ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>

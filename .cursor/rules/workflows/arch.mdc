@@ -1,5 +1,5 @@
 ---
-description:  First Ensure a .ai/prd.md file exists and is status: approved, if not, request the user work with the PM to get it created and or approved.
+description: 
 globs: 
 alwaysApply: false
 ---
