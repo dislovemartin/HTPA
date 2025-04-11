@@ -3,13 +3,6 @@ import { Button } from "@/components/ui/button"
 import { Github } from "lucide-react"
 
 export default function Navbar() {
-  const navItems = [
-    { href: "/solutions", label: "Solutions" },
-    { href: "/industries", label: "Industries" },
-    { href: "/about", label: "About Us" },
-    { href: "/ai-assistant", label: "AI 助手" },
-  ]
-
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center">
@@ -17,11 +10,15 @@ export default function Navbar() {
           <span className="font-bold">Amane Soft</span>
         </Link>
         <nav className="flex flex-1 items-center space-x-6 text-sm font-medium">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="transition-colors hover:text-primary">
-              {item.label}
-            </Link>
-          ))}
+          <Link href="/solutions" className="transition-colors hover:text-primary">
+            Solutions
+          </Link>
+          <Link href="/industries" className="transition-colors hover:text-primary">
+            Industries
+          </Link>
+          <Link href="/about" className="transition-colors hover:text-primary">
+            About Us
+          </Link>
         </nav>
         <div className="flex items-center space-x-4">
           <Link href="https://github.com/amanesoft" target="_blank" rel="noreferrer">

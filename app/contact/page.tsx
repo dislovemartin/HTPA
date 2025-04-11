@@ -10,27 +10,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react"
-import { submitContactForm } from "@/app/actions/contact-actions"
 
 export default function ContactPage() {
   const [formSubmitted, setFormSubmitted] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const form = e.target as HTMLFormElement
-    const formData = new FormData(form)
-
-    // Call the server action
-    const result = await submitContactForm(formData)
-
-    if (result.success) {
-      setFormSubmitted(true)
-      form.reset()
-      setTimeout(() => setFormSubmitted(false), 5000)
-    } else {
-      // Handle error
-      alert(result.message)
-    }
+    // In a real implementation, this would send the form data to a server
+    setFormSubmitted(true)
+    setTimeout(() => setFormSubmitted(false), 5000)
   }
 
   return (
@@ -123,7 +111,7 @@ export default function ContactPage() {
                   </div>
                   <h3 className="text-2xl font-semibold text-white mb-2">消息已发送</h3>
                   <p className="text-gray-400 max-w-md">
-                    感谢您的咨询！我们已收到您的信息，将在24小时内与您联系。您的信息已安全存储在我们的系统中。
+                    感谢您的咨询！我们已收到您的信息，将在24小时内与您联系。如有紧急事项，请直接致电我们。
                   </p>
                 </div>
               ) : (

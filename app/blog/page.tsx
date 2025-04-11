@@ -1,14 +1,75 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Link from "next/link"
 import PageLayout from "@/components/layout/page-layout"
 import PageHeader from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
-// Make sure to import the BlogPostCard component
-import { BlogPostCard } from "@/components/blog/blog-post-card"
-import { blogPosts } from "@/lib/blog-data"
+import { Search, Calendar, Clock, ArrowRight } from "lucide-react"
+
+const blogPosts = [
+  {
+    id: "task-management-tips",
+    title: "10 Task Management Tips for Remote Teams",
+    description:
+      "Learn how to effectively manage tasks and keep your remote team productive with these proven strategies.",
+    date: "2023-03-15",
+    category: "Productivity",
+    author: "Jane Smith",
+    readingTime: "5 min read",
+  },
+  {
+    id: "collaboration-tools",
+    title: "The Best Collaboration Tools for 2023",
+    description:
+      "Discover the top collaboration tools that can help your team work together more effectively, no matter where they are.",
+    date: "2023-02-28",
+    category: "Tools",
+    author: "John Doe",
+    readingTime: "8 min read",
+  },
+  {
+    id: "communication-strategies",
+    title: "Effective Communication Strategies for Distributed Teams",
+    description:
+      "Communication is key for distributed teams. Learn how to improve your team's communication and avoid common pitfalls.",
+    date: "2023-02-10",
+    category: "Communication",
+    author: "Emily Johnson",
+    readingTime: "6 min read",
+  },
+  {
+    id: "productivity-hacks",
+    title: "5 Productivity Hacks That Actually Work",
+    description:
+      "Cut through the noise and discover productivity techniques that have been proven to boost efficiency and output.",
+    date: "2023-01-25",
+    category: "Productivity",
+    author: "Michael Brown",
+    readingTime: "7 min read",
+  },
+  {
+    id: "remote-work-challenges",
+    title: "Overcoming the Challenges of Remote Work",
+    description:
+      "Remote work comes with its own set of challenges. Here's how to address them and create a thriving remote work environment.",
+    date: "2023-01-12",
+    category: "Remote Work",
+    author: "Sarah Wilson",
+    readingTime: "9 min read",
+  },
+  {
+    id: "team-building-activities",
+    title: "Virtual Team Building Activities That Actually Work",
+    description:
+      "Build a strong team culture even when working remotely with these engaging and effective virtual team building activities.",
+    date: "2022-12-20",
+    category: "Team Building",
+    author: "David Lee",
+    readingTime: "10 min read",
+  },
+]
 
 const categories = ["All", "Productivity", "Tools", "Communication", "Remote Work", "Team Building"]
 
@@ -55,17 +116,61 @@ export default function BlogPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post) => (
-              <BlogPostCard
-                key={post.id}
-                title={post.title}
-                excerpt={post.excerpt}
-                slug={post.slug}
-                date={post.date}
-                readTime={post.readTime}
-                imageSrc={post.imageSrc}
-                imageAlt={post.imageAlt}
-              />
+            {blogPosts.map((post, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Link href={`/blog/${post.id}`}>
+                  <div className="bg-neutral-900 border border-gold-900/30 rounded-lg overflow-hidden hover:border-gold-500/50 transition-all duration-300 h-full flex flex-col">
+                    <div className="aspect-video bg-gradient-to-br from-black to-neutral-900 relative">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-gold-900/20 flex items-center justify-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-8 w-8 text-gold-500"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div className="absolute top-4 left-4 bg-black/80 text-gold-500 text-xs font-medium px-2 py-1 rounded">
+                        {post.category}
+                      </div>
+                    </div>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-center text-sm text-gray-400 mb-3">
+                        <Calendar className="h-4 w-4 mr-1" />
+                        <span>{post.date}</span>
+                        <span className="mx-2">•</span>
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>{post.readingTime}</span>
+                      </div>
+                      <h3 className="text-xl font-semibold text-white mb-3">{post.title}</h3>
+                      <p className="text-gray-400 mb-4 flex-1">{post.description}</p>
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gold-900/10">
+                        <div className="text-sm text-gray-400">
+                          By: <span className="text-gold-500">{post.author}</span>
+                        </div>
+                        <div className="text-gold-500 flex items-center text-sm font-medium">
+                          Read More <ArrowRight className="ml-1 h-4 w-4" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
 

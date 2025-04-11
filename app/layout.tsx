@@ -1,21 +1,16 @@
 import type React from "react"
 import "./globals.css"
-import { Inter, Noto_Sans_SC, Roboto_Mono } from "next/font/google"
+import { Inter, Noto_Sans_SC } from "next/font/google"
+import type { Metadata } from "next"
 import { LanguageProvider } from "@/components/language-provider"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Analytics } from "@vercel/analytics/react"
-import { GoogleAnalytics } from "@next/third-parties/google"
-import { GoogleTagManager } from "@/components/google-tag-manager"
-import { SearchConsoleVerification } from "@/components/search-console-verification"
 
-// Latin fonts
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 })
 
-// Chinese font
 const notoSansSC = Noto_Sans_SC({
   subsets: ["latin"],
   variable: "--font-noto-sans-sc",
@@ -23,14 +18,22 @@ const notoSansSC = Noto_Sans_SC({
   display: "swap",
 })
 
-// Monospace font for numbers and code
-const robotoMono = Roboto_Mono({
-  subsets: ["latin"],
-  variable: "--font-roboto-mono",
-  display: "swap",
-})
-
-// Metadata...
+export const metadata: Metadata = {
+  title: "HTPA 恒泰会计师事务所 | 专业会计税务服务",
+  description:
+    "HTPA恒泰会计师事务所提供专业的会计、税务和财务管理服务，包括个人所得税申报、公司纳税申报、税务审计、企业注册等。",
+  keywords: "会计师事务所, CPA, 税务服务, 个人所得税, 公司纳税申报, 安省会计师, Scarborough会计师",
+  openGraph: {
+    type: "website",
+    locale: "zh_CN",
+    url: "https://htpa.ca",
+    title: "HTPA 恒泰会计师事务所 | 专业会计税务服务",
+    description:
+      "HTPA恒泰会计师事务所提供专业的会计、税务和财务管理服务，包括个人所得税申报、公司纳税申报、税务审计、企业注册等。",
+    siteName: "HTPA 恒泰会计师事务所",
+  },
+    generator: 'v0.dev'
+}
 
 export default function RootLayout({
   children,
@@ -39,16 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN" className="scroll-smooth" suppressHydrationWarning>
-      <head>
-        <SearchConsoleVerification verificationId="YOUR_VERIFICATION_ID" />
-      </head>
-      <body className={`${inter.variable} ${notoSansSC.variable} ${robotoMono.variable} font-sans`}>
+      <body className={`${inter.variable} ${notoSansSC.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
-        <Analytics />
-        <GoogleAnalytics gaId="G-XXXXXXXXXX" />
-        <GoogleTagManager gtmId="GTM-XXXXXXX" />
       </body>
     </html>
   )
@@ -56,7 +53,3 @@ export default function RootLayout({
 
 
 import './globals.css'
-
-export const metadata = {
-      generator: 'v0.dev'
-    };

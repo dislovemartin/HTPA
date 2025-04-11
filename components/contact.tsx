@@ -9,43 +9,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useLanguage } from "@/components/language-provider"
-import { submitContactForm } from "@/app/actions/contact-actions"
-import { useAnalytics } from "@/hooks/use-analytics"
 
 export default function Contact() {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const { t } = useLanguage()
-  const { trackEvent } = useAnalytics()
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    service: "",
-    message: "",
-  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const form = e.target as HTMLFormElement
-    const formData = new FormData(form)
-
-    // Track form submission event
-    trackEvent("generate_lead", {
-      service_type: formData.get("service"),
-      form_id: "contact_main",
-    })
-
-    // Call the server action
-    const result = await submitContactForm(formData)
-
-    if (result.success) {
-      setFormSubmitted(true)
-      form.reset()
-      setTimeout(() => setFormSubmitted(false), 5000)
-    } else {
-      // Handle error
-      alert(result.message)
-    }
+    // In a real implementation, this would send the form data to a server
+    setFormSubmitted(true)
+    setTimeout(() => setFormSubmitted(false), 5000)
   }
 
   return (
