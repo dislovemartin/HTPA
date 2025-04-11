@@ -2,60 +2,76 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import Link from "next/link"
 import PageLayout from "@/components/layout/page-layout"
 import PageHeader from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
-import { BarChart3, Building2, FileText, Calculator, Shield, Users } from "lucide-react"
+import {
+  BarChart3,
+  Building2,
+  FileText,
+  Calculator,
+  Shield,
+  Users,
+  ArrowRight,
+} from "lucide-react"
+
+// Define slugs for each service
+const serviceSlugs: { [key: string]: string } = {
+  "审计与鉴证": "audit-assurance",
+  "税务规划与申报": "tax-planning",
+  "企业注册与咨询": "business-registration",
+  "财务报表编制": "financial-statement-preparation",
+  "风险管理": "risk-management",
+  "管理咨询": "management-consulting",
+}
 
 const services = [
   {
     icon: <BarChart3 className="h-8 w-8 text-gold-500" />,
     title: "审计与鉴证",
-    description: "我们提供全面的审计与鉴证服务，确保您的财务报表准确无误，符合相关法规要求。",
-    details:
-      "我们的审计与鉴证服务包括财务报表审计、合规审计、内部控制审计、特殊目的审计等。我们的专业团队将确保您的财务报表准确无误，符合相关法规要求，提高财务透明度和可信度。",
+    description: "提供全面的审计与鉴证服务，确保您的财务报表准确无误，符合相关法规要求。",
+    slug: serviceSlugs["审计与鉴证"],
   },
   {
     icon: <FileText className="h-8 w-8 text-gold-500" />,
     title: "税务规划与申报",
-    description: "我们提供专业的税务规划和申报服务，帮助您合理避税，降低税务风险。",
-    details:
-      "我们的税务规划与申报服务包括个人所得税申报、企业所得税申报、增值税申报、税务筹划、税务咨询等。我们的专业团队将帮助您合理避税，降低税务风险，确保税务合规。",
+    description: "提供专业的税务规划和申报服务，帮助您合理避税，降低税务风险。",
+    slug: serviceSlugs["税务规划与申报"],
   },
   {
     icon: <Building2 className="h-8 w-8 text-gold-500" />,
     title: "企业注册与咨询",
-    description: "我们提供一站式企业注册和咨询服务，帮助您快速启动业务，实现商业目标。",
-    details:
-      "我们的企业注册与咨询服务包括公司注册、变更、注销、商标注册、专利申请、企业管理咨询等。我们的专业团队将帮助您快速启动业务，实现商业目标。",
+    description: "提供一站式企业注册和咨询服务，帮助您快速启动业务，实现商业目标。",
+    slug: serviceSlugs["企业注册与咨询"],
   },
   {
     icon: <Calculator className="h-8 w-8 text-gold-500" />,
     title: "财务报表编制",
-    description: "我们提供专业的财务报表编制服务，帮助您了解企业的财务状况，为决策提供依据。",
-    details:
-      "我们的财务报表编制服务包括资产负债表、利润表、现金流量表、所有者权益变动表等财务报表的编制。我们的专业团队将帮助您了解企业的财务状况，为决策提供依据。",
+    description: "提供专业的财务报表编制服务，帮助您了解企业的财务状况，为决策提供依据。",
+    slug: serviceSlugs["财务报表编制"],
   },
   {
     icon: <Shield className="h-8 w-8 text-gold-500" />,
     title: "风险管理",
-    description: "我们提供全面的风险管理服务，帮助您识别、评估和管理企业面临的各种风险。",
-    details:
-      "我们的风险管理服务包括风险识别、风险评估、风险控制、风险监测等。我们的专业团队将帮助您识别、评估和管理企业面临的各种风险，确保企业的可持续发展。",
+    description: "提供全面的风险管理服务，帮助您识别、评估和管理企业面临的各种风险。",
+    slug: serviceSlugs["风险管理"],
   },
   {
     icon: <Users className="h-8 w-8 text-gold-500" />,
     title: "管理咨询",
-    description: "我们提供专业的管理咨询服务，帮助您提高企业管理水平，实现企业价值最大化。",
-    details:
-      "我们的管理咨询服务包括战略规划、组织结构设计、流程优化、绩效管理、人力资源管理等。我们的专业团队将帮助您提高企业管理水平，实现企业价值最大化。",
+    description: "提供专业的管理咨询服务，帮助您提高企业管理水平，实现企业价值最大化。",
+    slug: serviceSlugs["管理咨询"],
   },
 ]
 
 export default function ServicesPage() {
   return (
     <PageLayout>
-      <PageHeader title="服务 项目" subtitle="我们提供全面的会计、税务和咨询服务，帮助您实现财务目标，确保合规运营。" />
+      <PageHeader
+        title="服务项目"
+        subtitle="我们提供全面的会计、税务和咨询服务，帮助您实现财务目标，确保合规运营。"
+      />
 
       <section className="py-16 bg-black relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-gold-600/5 rounded-full filter blur-[100px] opacity-30"></div>
@@ -65,22 +81,25 @@ export default function ServicesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <motion.div
-                key={index}
+                key={service.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-neutral-900 border border-gold-900/30 rounded-lg p-6 hover:border-gold-500/50 transition-all duration-300 hover:shadow-gold"
+                className="bg-neutral-900 border border-gold-900/30 rounded-lg p-6 hover:border-gold-500/50 transition-all duration-300 hover:shadow-gold flex flex-col"
               >
                 <div className="mb-4 p-3 bg-gold-900/20 inline-block rounded-lg">{service.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-3">{service.title}</h3>
-                <p className="text-gray-400 mb-4">{service.description}</p>
-                <Button
-                  variant="outline"
-                  className="border-gold-900/30 text-gold-500 hover:bg-gold-900/20 hover:border-gold-500"
-                >
-                  了解更多
-                </Button>
+                <p className="text-gray-400 mb-4 flex-grow">{service.description}</p>
+                <Link href={`/services/${service.slug}`} className="mt-auto">
+                  <Button
+                    variant="outline"
+                    className="w-full border-gold-900/30 text-gold-500 hover:bg-gold-900/20 hover:border-gold-500 group"
+                  >
+                    了解更多
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
+                </Link>
               </motion.div>
             ))}
           </div>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import PageLayout from "@/components/layout/page-layout"
@@ -74,6 +75,30 @@ const blogPosts = [
 const categories = ["All", "Productivity", "Tools", "Communication", "Remote Work", "Team Building"]
 
 export default function BlogPage() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All")
+
+  const filteredPosts = useMemo(() => {
+    return blogPosts.filter((post) => {
+      const matchesCategory =
+        selectedCategory === "All" || post.category === selectedCategory
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.author.toLowerCase().includes(searchQuery.toLowerCase())
+      return matchesCategory && matchesSearch
+    })
+  }, [searchQuery, selectedCategory])
+
+  const handleNewsletterSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const email = event.currentTarget.email.value
+    console.log("Newsletter subscription submitted for:", email)
+    // TODO: Implement actual newsletter subscription logic (e.g., API call)
+    alert(`Thank you for subscribing with ${email}! (Functionality pending)`)
+    event.currentTarget.reset()
+  }
+
   return (
     <PageLayout>
       <PageHeader
@@ -82,11 +107,23 @@ export default function BlogPage() {
       >
         <div className="mt-8 max-w-md mx-auto">
           <div className="relative">
+            <label htmlFor="blog-search" className="sr-only">
+              Search articles
+            </label>
             <Input
+              id="blog-search"
+              type="search"
               placeholder="Search articles..."
               className="bg-black border-gold-900/30 text-white focus:border-gold-500 pl-10 pr-4 py-2 rounded-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              aria-describedby="search-icon"
             />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search
+              id="search-icon"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </PageHeader>
@@ -96,18 +133,20 @@ export default function BlogPage() {
         <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-gold-600/5 rounded-full filter blur-[80px] opacity-20"></div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center gap-4 mb-12" role="group" aria-label="Filter by category">
             {categories.map((category, index) => (
               <motion.button
-                key={index}
+                key={category}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className={`px-4 py-2 rounded-full text-sm ${
-                  index === 0
+                onClick={() => setSelectedCategory(category)}
+                aria-pressed={selectedCategory === category}
+                className={`px-4 py-2 rounded-full text-sm transition-colors duration-200 ${
+                  selectedCategory === category
                     ? "bg-gold-500 text-black"
-                    : "bg-neutral-900 text-white border border-gold-900/30 hover:border-gold-500/50"
+                    : "bg-neutral-900 text-white border border-gold-900/30 hover:border-gold-500/50 hover:bg-neutral-800"
                 }`}
               >
                 {category}
@@ -115,67 +154,84 @@ export default function BlogPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Link href={`/blog/${post.id}`}>
-                  <div className="bg-neutral-900 border border-gold-900/30 rounded-lg overflow-hidden hover:border-gold-500/50 transition-all duration-300 h-full flex flex-col">
-                    <div className="aspect-video bg-gradient-to-br from-black to-neutral-900 relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-gold-900/20 flex items-center justify-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-8 w-8 text-gold-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                            />
-                          </svg>
+          {filteredPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredPosts.map((post, index) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  layout
+                >
+                  <Link href={`/blog/${post.id}`} aria-label={`Read more about ${post.title}`}>
+                    <article className="bg-neutral-900 border border-gold-900/30 rounded-lg overflow-hidden hover:border-gold-500/50 transition-all duration-300 h-full flex flex-col group">
+                      <div className="aspect-video bg-gradient-to-br from-black to-neutral-900 relative overflow-hidden">
+                        <div className="absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                          <div className="w-16 h-16 rounded-full bg-gold-900/20 flex items-center justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-8 w-8 text-gold-500"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="absolute top-4 left-4 bg-black/80 text-gold-500 text-xs font-medium px-2 py-1 rounded z-10">
+                          {post.category}
                         </div>
                       </div>
-                      <div className="absolute top-4 left-4 bg-black/80 text-gold-500 text-xs font-medium px-2 py-1 rounded">
-                        {post.category}
-                      </div>
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="flex items-center text-sm text-gray-400 mb-3">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        <span>{post.date}</span>
-                        <span className="mx-2">•</span>
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{post.readingTime}</span>
-                      </div>
-                      <h3 className="text-xl font-semibold text-white mb-3">{post.title}</h3>
-                      <p className="text-gray-400 mb-4 flex-1">{post.description}</p>
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gold-900/10">
-                        <div className="text-sm text-gray-400">
-                          By: <span className="text-gold-500">{post.author}</span>
+                      <div className="p-6 flex-1 flex flex-col">
+                        <div className="flex items-center text-sm text-gray-400 mb-3">
+                          <Calendar className="h-4 w-4 mr-1" aria-hidden="true" />
+                          <time dateTime={post.date}>{post.date}</time>
+                          <span className="mx-2" aria-hidden="true">•</span>
+                          <Clock className="h-4 w-4 mr-1" aria-hidden="true" />
+                          <span>{post.readingTime}</span>
                         </div>
-                        <div className="text-gold-500 flex items-center text-sm font-medium">
-                          Read More <ArrowRight className="ml-1 h-4 w-4" />
+                        <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-gold-400 transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-gray-400 mb-4 flex-1">{post.description}</p>
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gold-900/10">
+                          <div className="text-sm text-gray-400">
+                            By: <span className="text-gold-500">{post.author}</span>
+                          </div>
+                          <div className="text-gold-500 flex items-center text-sm font-medium">
+                            Read More <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                    </article>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <h3 className="text-xl font-semibold text-white mb-2">No articles found</h3>
+              <p className="text-gray-400">Try adjusting your search or category filters.</p>
+            </div>
+          )}
 
           <div className="flex justify-center mt-12">
-            <Button variant="gold" size="lg" className="rounded-full px-8">
+            <Button
+              variant="gold"
+              size="lg"
+              className="rounded-full px-8"
+              disabled
+              aria-disabled="true"
+            >
               Load More
             </Button>
           </div>
@@ -193,16 +249,23 @@ export default function BlogPage() {
             <p className="text-gray-400 mb-8">
               Get the latest articles, tips, and resources delivered straight to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <label htmlFor="newsletter-email" className="sr-only">
+                Email address
+              </label>
               <Input
+                id="newsletter-email"
                 type="email"
+                name="email"
                 placeholder="Your email address"
-                className="bg-black border-gold-900/30 text-white focus:border-gold-500 rounded-full"
+                required
+                className="bg-black border-gold-900/30 text-white focus:border-gold-500 rounded-full flex-1"
+                aria-required="true"
               />
-              <Button variant="gold" className="rounded-full px-6">
+              <Button type="submit" variant="gold" className="rounded-full px-6">
                 Subscribe
               </Button>
-            </div>
+            </form>
           </div>
         </div>
       </section>
