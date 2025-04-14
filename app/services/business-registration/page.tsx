@@ -1,52 +1,112 @@
-import PageLayout from "@/components/layout/page-layout"
-import PageHeader from "@/components/ui/page-header"
-import { Separator } from "@/components/ui/separator"
-import { Metadata } from "next"
+import type {Metadata} from "next";
+import BusinessRegistrationClientContent from "@/components/page-specific/BusinessRegistrationClientContent";
 
+// Metadata from Plan
 export const metadata: Metadata = {
-    title: "企业注册与咨询 | [Your Company Name]", // Replace [Your Company Name]
-    description: "提供一站式企业注册和咨询服务，帮助您快速启动业务，实现商业目标。",
-    // Add more keywords relevant to business registration and consulting in Chinese
-    keywords: ["企业注册", "公司注册", "工商注册", "创业咨询", "商业计划", "股权架构", "外资企业注册"],
-}
+    title: "Business Registration Services in Ontario | HTPA Accounting",
+    description:
+        "HTPA Accounting provides expert business registration services in Ontario. Choose the right structure, complete required documentation, and start your business with confidence.",
+    keywords: [
+        "Ontario business registration",
+        "company registration service",
+        "incorporate in Ontario",
+        "sole proprietorship registration",
+        "partnership registration Ontario",
+        "federal vs provincial registration",
+        "named vs numbered company",
+        "business startup services",
+        "small business setup Ontario"
+    ],
+};
+
+// Define FAQ Schema Data
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is the difference between a sole proprietorship, partnership, and corporation?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A sole proprietorship is owned by one person with no legal distinction between owner and business. A partnership involves two or more owners sharing profits and liabilities. A corporation is a separate legal entity, offering liability protection but involving more complex setup and compliance."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Should I register federally or provincially?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Provincial registration allows you to operate only within Ontario under your registered name. Federal incorporation allows operation across Canada under one name and offers stronger name protection but involves more complex filing requirements."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How long does the business registration process take?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Timelines vary. Provincial registration (sole proprietorship/partnership) can often be done online within a few days. Incorporation (provincial or federal) typically takes longer, potentially 1-2 weeks or more, depending on name search requirements and processing times."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What are the typical business registration fees?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Fees depend on the structure and jurisdiction. Provincial registration for sole proprietorships/partnerships is generally the least expensive. Incorporation involves higher government fees, name search costs, and potentially legal/accounting fees for setup. HTPA can provide a detailed quote."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What do I need to do after registering my business?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Post-registration steps often include obtaining a business number (BN) from the CRA, registering for specific CRA program accounts like GST/HST and Payroll, registering with WSIB if you have employees, obtaining municipal licenses/permits, and setting up a business bank account."
+            }
+        }
+    ]
+};
+
+// Define Service Schema Data
+const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Business Registration Service",
+    "provider": {
+        "@type": "ProfessionalService",
+        "name": "HTPA Accounting",
+        "address": { // Assuming a primary address, adjust if needed
+            "@type": "PostalAddress",
+            "streetAddress": "20 Bamburgh Circle",
+            "addressLocality": "Scarborough",
+            "addressRegion": "ON",
+            "postalCode": "M1W 3Y5",
+            "addressCountry": "CA"
+        },
+        "telephone": "+1-YOUR-PHONE-NUMBER", // Replace with actual number
+        "url": "https://htpa.ca" // Replace with actual domain if different
+    },
+    "areaServed": {
+        "@type": "AdministrativeArea",
+        "name": "Ontario"
+    },
+    "description": "Expert business registration services in Ontario, including structure selection, federal/provincial registration, and post-registration guidance.",
+    "keywords": ["Ontario business registration", "company registration", "incorporation", "sole proprietorship", "partnership", "business setup"]
+};
 
 export default function BusinessRegistrationPage() {
     return (
-        <PageLayout>
-            <PageHeader
-                title="企业注册与咨询"
-                subtitle="简化流程，加速您的商业启动"
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{__html: JSON.stringify(faqSchema)}}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{__html: JSON.stringify(serviceSchema)}}
             />
 
-            <section className="py-12 md:py-16 lg:py-20">
-                <div className="container mx-auto px-4">
-                    <div className="prose prose-lg max-w-4xl mx-auto dark:prose-invert">
-                        <h2>服务概述</h2>
-                        <p>
-                            我们提供全面、高效的企业注册与咨询服务，旨在帮助创业者和企业快速、合规地完成公司设立流程。从初步咨询到注册完成，我们提供一站式解决方案，为您扫清障碍，让您专注于核心业务发展。
-                        </p>
-                        <Separator className="my-8" />
-
-                        <h2>核心服务内容</h2>
-                        <ul>
-                            <li>内资、外资公司注册咨询与代办</li>
-                            <li>公司类型选择与股权架构设计</li>
-                            <li>注册地址选择建议</li>
-                            <li>银行开户协助</li>
-                            <li>后续资质申请咨询（如ICP许可证等）</li>
-                            <li>公司变更与注销服务</li>
-                            {/* Add more specific services */}
-                        </ul>
-                        <Separator className="my-8" />
-
-                        <h2>为何选择我们？</h2>
-                        <p>
-                            [在此处添加详细内容，例如：熟悉各地政策法规、高效专业的团队、一站式服务体验、透明的收费标准、丰富的行业经验等。]
-                        </p>
-                        {/* Add more sections as needed, e.g., Registration Process, FAQ */}
-                    </div>
-                </div>
-            </section>
-        </PageLayout>
-    )
-} 
+            <BusinessRegistrationClientContent faqSchema={faqSchema}/>
+        </>
+    );
+}
